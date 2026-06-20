@@ -61,5 +61,16 @@ def load_sample_players():
 
         print(result)
 
+def load_draft_picks():
+    """
+    load draft picks from CSV file into DuckDB database
+    """
+    df = pd.read_csv(DATA_PATH)
+
+    df["draft_pick_id"] = range(1, len(df) + 1)
+    df["round_number"] = df["round_number"].astype(int)
+    df["pick_number"] = df["pick_number"].astype(int)    
+    
+
 if __name__ == "__main__":
     load_sample_players()

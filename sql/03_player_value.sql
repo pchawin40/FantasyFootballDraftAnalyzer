@@ -1,7 +1,7 @@
 SELECT 
-    p.player_name,
-    p.position,
-    p.nfl_team,
+    dp.player_name,
+    dp.position,
+    dp.nfl_team,
     fp.projected_points, 
     fp.replacement_points,
     fp.vorp
