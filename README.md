@@ -21,46 +21,6 @@ The final output should help answer:
 - How much value does this player add compared with a replacement-level option?
 - Is the recommended pick based on projected points, roster need, or positional advantage?
 
-## Current Project Status
-
-This project currently includes:
-
-- A sample player dataset
-- Half-PPR scoring logic
-- Value over replacement player, or VORP, calculation
-- A DuckDB database loading script
-- SQL schema for player, projection, and draft pick tables
-- SQL logic to exclude already-drafted players from available-player rankings
-- Basic pytest tests for scoring logic
-
-## Project Structure
-
-```text
-.
-├── README.md
-├── config/
-│   └── league_settings.yaml
-├── data/
-│   └── sample_players.csv
-├── dashboard/
-├── images/
-├── notebooks/
-│   └── exploration.ipynb
-├── requirements.txt
-├── sql/
-│   ├── 01_schema.sql
-│   ├── 02_cleaning.sql
-│   ├── 03_player_value.sql
-│   └── 04_available_players.sql
-├── src/
-│   ├── extract.py
-│   ├── load.py
-│   ├── projections.py
-│   └── transform.py
-└── tests/
-    └── test_scoring.py
-```
-
 ## Setup Instructions
 
 Run these commands from the project root folder:
@@ -88,7 +48,7 @@ source .venv/bin/activate
 When the virtual environment is active, the terminal should show something like this:
 
 ```bash
-(.venv) pathocha000@LAPTOP-0IMBSTUB:~/personal/FantasyFootballDraftAnalyzer$
+(.venv) ~/personal/FantasyFootballDraftAnalyzer$
 ```
 
 ### 3. Install project packages
@@ -180,32 +140,3 @@ duckdb fantasy_football.duckdb
 ```bash
 pytest
 ```
-
-### Save changes to GitHub
-
-```bash
-git status
-git add .
-git commit -m "Describe what changed"
-git push
-```
-
-## Current Milestone
-
-The current milestone is to prove that the analyzer can:
-
-1. Load sample player data
-2. Calculate projected player value
-3. Store the data in DuckDB
-4. Store drafted players in a draft pick table
-5. Exclude already-drafted players
-6. Rank the best available players by VORP
-
-## Next Planned Improvements
-
-- Add roster-based recommendations
-- Add position scarcity calculations
-- Add round and pick context
-- Replace sample data with real historical NFL data
-- Add a Power BI dashboard
-- Add live or near-live fantasy draft data later
