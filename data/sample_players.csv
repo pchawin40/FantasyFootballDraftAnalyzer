@@ -1,0 +1,11 @@
+player_id,player_name,position,nfl_team,projected_points,replacement_points
+p001,Christian McCaffrey,RB,SF,285,155
+p002,CeeDee Lamb,WR,DAL,270,145
+p003,Tyreek Hill,WR,MIA,265,145
+p004,Ja'Marr Chase,WR,CIN,255,145
+p005,Bijan Robinson,RB,ATL,250,155
+p006,Breece Hall,RB,NYJ,240,155
+p007,Amon-Ra St. Brown,WR,DET,245,145
+p008,Justin Jefferson,WR,MIN,250,145
+p009,Travis Kelce,TE,KC,215,105
+p010,Josh Allen,QB,BUF,330,260

@@ -21,7 +21,7 @@ def calculate_half_ppr_points(player_stats: dict, scoring: dict) -> float:
 
 def calculate_vorp(projected_points: float, replacement_points: float) -> float:
     """
-    Calcualte value over replacement player
+    Calculate value over replacement player
     """
 
     return round(projected_points - replacement_points, 2)
