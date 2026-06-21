@@ -16,6 +16,7 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).resolve().parents[1]
 PLAYERS_PATH = ROOT_DIR / "data" / "sample_players.csv"
 DRAFT_PICKS_PATH = ROOT_DIR / "data" / "sample_draft_picks.csv"
+OUTPUT_PATH = ROOT_DIR / "outputs" / "draft_recommendations.csv"
 
 # read sample players
 def check_sample_players_quality(
