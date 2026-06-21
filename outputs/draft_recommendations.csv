@@ -1,8 +1,46 @@
 player_name,position,vorp,scarcity_adjustment,roster_count,roster_need_adjustment,recommendation_score,recommendation_reason
-Travis Kelce,TE,110.0,10.0,0,8,128.0,High VORP + scarce position + roster need
-Ja'Marr Chase,WR,110.0,3.33,0,8,121.33,High VORP + roster need
-Justin Jefferson,WR,105.0,3.33,0,8,116.33,High VORP + roster need
-Amon-Ra St. Brown,WR,100.0,3.33,0,8,111.33,High VORP + roster need
-Bijan Robinson,RB,95.0,5.0,1,4,104.0,Depth option
-Breece Hall,RB,85.0,5.0,1,4,94.0,Depth option
-Josh Allen,QB,70.0,10.0,0,8,88.0,Scarce position
+Travis Kelce,TE,110.0,1.11,0,8,119.11,High VORP + roster need
+Ja'Marr Chase,WR,110.0,0.67,0,8,118.67,High VORP + roster need
+Justin Jefferson,WR,105.0,0.67,0,8,113.67,High VORP + roster need
+Sam LaPorta,TE,100.0,1.11,0,8,109.11,High VORP + roster need
+Amon-Ra St. Brown,WR,100.0,0.67,0,8,108.67,High VORP + roster need
+Davante Adams,WR,93.0,0.67,0,8,101.67,Depth option
+Bijan Robinson,RB,95.0,0.77,1,4,99.77,Depth option
+A.J. Brown,WR,91.0,0.67,0,8,99.67,Depth option
+Mark Andrews,TE,90.0,1.11,0,8,99.11,Depth option
+Puka Nacua,WR,87.0,0.67,0,8,95.67,Depth option
+Trey McBride,TE,83.0,1.11,0,8,92.11,Depth option
+Garrett Wilson,WR,83.0,0.67,0,8,91.67,Depth option
+Breece Hall,RB,85.0,0.77,1,4,89.77,Depth option
+George Kittle,TE,75.0,1.11,0,8,84.11,Depth option
+Chris Olave,WR,75.0,0.67,0,8,83.67,Depth option
+Jonathan Taylor,RB,75.0,0.77,1,4,79.77,Depth option
+Josh Allen,QB,70.0,1.25,0,8,79.25,Depth option
+Jahmyr Gibbs,RB,73.0,0.77,1,4,77.77,Depth option
+Deebo Samuel,WR,69.0,0.67,0,8,77.67,Depth option
+Saquon Barkley,RB,70.0,0.77,1,4,74.77,Depth option
+Dalton Kincaid,TE,65.0,1.11,0,8,74.11,Depth option
+DK Metcalf,WR,65.0,0.67,0,8,73.67,Depth option
+Nico Collins,WR,63.0,0.67,0,8,71.67,Depth option
+Evan Engram,TE,60.0,1.11,0,8,69.11,Depth option
+Jaylen Waddle,WR,60.0,0.67,0,8,68.67,Depth option
+Brandon Aiyuk,WR,57.0,0.67,0,8,65.67,Depth option
+Derrick Henry,RB,60.0,0.77,1,4,64.77,Depth option
+Jalen Hurts,QB,55.0,1.25,0,8,64.25,Depth option
+David Njoku,TE,53.0,1.11,0,8,62.11,Depth option
+Mike Evans,WR,53.0,0.67,0,8,61.67,Depth option
+Lamar Jackson,QB,50.0,1.25,0,8,59.25,Depth option
+DeVonta Smith,WR,50.0,0.67,0,8,58.67,Depth option
+Kenneth Walker III,RB,50.0,0.77,1,4,54.77,Depth option
+Jake Ferguson,TE,45.0,1.11,0,8,54.11,Depth option
+De'Von Achane,RB,47.0,0.77,1,4,51.77,Depth option
+Patrick Mahomes,QB,40.0,1.25,0,8,49.25,Depth option
+James Cook,RB,43.0,0.77,1,4,47.77,Depth option
+Rachaad White,RB,37.0,0.77,1,4,41.77,Depth option
+Isiah Pacheco,RB,33.0,0.77,1,4,37.77,Depth option
+C.J. Stroud,QB,25.0,1.25,0,8,34.25,Depth option
+Joe Mixon,RB,29.0,0.77,1,4,33.77,Depth option
+Alvin Kamara,RB,25.0,0.77,1,4,29.77,Depth option
+Joe Burrow,QB,20.0,1.25,0,8,29.25,Depth option
+Anthony Richardson,QB,15.0,1.25,0,8,24.25,Depth option
+Dak Prescott,QB,10.0,1.25,0,8,19.25,Depth option
