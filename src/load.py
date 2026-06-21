@@ -4,7 +4,8 @@ import pandas as pd
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
-DATA_PATH = ROOT_DIR / "data" / "sample_players.csv"
+PLAYERS_PATH = ROOT_DIR / "data" / "sample_players.csv"
+DRAFT_PICKS_PATH = ROOT_DIR / "data" / "sample_draft_picks.csv"
 DB_PATH = ROOT_DIR / "fantasy_football.duckdb"
 SCHEMA_PATH = ROOT_DIR / "sql" / "01_schema.sql"
 
@@ -12,7 +13,7 @@ def load_sample_players():
     """
     load sample players from CSV file into DuckDB database
     """
-    df = pd.read_csv(DATA_PATH)
+    df = pd.read_csv(PLAYERS_PATH)
 
     df["season"] = 2026
     df["vorp"] = df["projected_points"] - df["replacement_points"]
@@ -35,6 +36,7 @@ def load_sample_players():
         schema_sql = SCHEMA_PATH.read_text()
         con.execute(schema_sql)
 
+        con.execute("DELETE FROM fact_draft_pick")
         con.execute("DELETE FROM fact_player_projection")
         con.execute("DELETE FROM dim_player")
 
@@ -65,12 +67,47 @@ def load_draft_picks():
     """
     load draft picks from CSV file into DuckDB database
     """
-    df = pd.read_csv(DATA_PATH)
+    # read draft picks from CSV file
+    df = pd.read_csv(DRAFT_PICKS_PATH)
 
-    df["draft_pick_id"] = range(1, len(df) + 1)
-    df["round_number"] = df["round_number"].astype(int)
-    df["pick_number"] = df["pick_number"].astype(int)    
-    
+    # add columns draft_pick_id, round_number, pick_number, team_number
+    draft_players_df = df [
+        [
+            "round_number", 
+            "pick_number", 
+            "team_number", 
+            "player_id"
+        ]
+    ].copy()
+
+    # insert draft pick columns
+    draft_players_df.insert(0, "draft_pick_id", range(1, len(draft_players_df) + 1))
+
+    # register draft picks dataframe
+    with duckdb.connect(DB_PATH) as con:
+        schema_sql = SCHEMA_PATH.read_text()
+        con.execute(schema_sql)
+
+        # insert draft picks into database
+        con.register("draft_players_df", draft_players_df)
+
+        con.execute("INSERT INTO fact_draft_pick SELECT * FROM draft_players_df")
+
+        result = con.execute(
+            """
+            SELECT
+                fdp.draft_pick_id,
+                fdp.round_number,
+                fdp.pick_number,
+                fdp.team_number,
+                fdp.player_id
+            FROM fact_draft_pick fdp
+            ORDER BY fdp.draft_pick_id ASC
+            """
+        ).fetchdf()
+
+        print(result)
 
 if __name__ == "__main__":
     load_sample_players()
+    load_draft_picks()
