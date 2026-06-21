@@ -14,6 +14,7 @@ A portfolio analytics project that builds a fantasy football draft decision engi
 * [Key Metrics](#key-metrics)
 * [Project Structure](#project-structure)
 * [Conclusion and Next Steps](#conclusion-and-next-steps)
+* [Data Dictionary](docs/data_dictionary.md)
 
 ## Getting Started
 
@@ -181,6 +182,8 @@ player_id
 ```
 
 This structure keeps player attributes, projections, and draft activity separate so the recommendation logic can be updated without rebuilding the entire project.
+
+For detailed field definitions and metric logic, see the [Data Dictionary](docs/data_dictionary.md).
 
 ## SQL Analytics Workflow
 
