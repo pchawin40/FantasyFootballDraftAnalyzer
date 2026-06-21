@@ -32,4 +32,4 @@ def export_draft_recommendations():
         print(f"Draft recommendations exported to {OUTPUT_PATH}")
 
 if __name__ == "__main__":
-    export_recommendations()
+    export_draft_recommendations()

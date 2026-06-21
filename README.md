@@ -55,7 +55,7 @@ pip install -r requirements.txt
 The main project pipeline can be run with one command:
 
 ```bash
-python src/run_pipeline.py
+python -m src.run_pipeline
 ```
 
 This command:
