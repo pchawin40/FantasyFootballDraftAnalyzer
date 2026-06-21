@@ -18,7 +18,10 @@ PLAYERS_PATH = ROOT_DIR / "data" / "sample_players.csv"
 DRAFT_PICKS_PATH = ROOT_DIR / "data" / "sample_draft_picks.csv"
 
 # read sample players
-def check_sample_players_quality():
+def check_sample_players_quality(
+    players_path=PLAYERS_PATH,
+    draft_picks_path=DRAFT_PICKS_PATH
+):
     """
     check quality of sample players
     """
