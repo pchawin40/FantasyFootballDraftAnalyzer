@@ -325,7 +325,7 @@ source .venv/bin/activate
 Run the full pipeline:
 
 ```bash
-python src/run_pipeline.py
+python -m src.run_pipeline
 ```
 
 Run tests:
