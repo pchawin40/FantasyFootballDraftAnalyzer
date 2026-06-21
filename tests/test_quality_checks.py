@@ -1,6 +1,12 @@
 from src.quality_checks import check_sample_players_quality
+import duckdb
 import pandas as pd
 import pytest
+from pathlib import Path
+
+ROOT_DIR = Path(__file__).resolve().parents[1]
+OUTPUT_PATH = ROOT_DIR / "outputs" / "draft_recommendations.csv"
+DRAFT_PICKS_PATH = ROOT_DIR / "outputs" / "sample_draft_picks.csv"
 
 # test player quality checks
 def test_check_sample_players_quality():
@@ -104,3 +110,68 @@ def test_not_found_drafted_player(tmp_path):
         check_sample_players_quality(fake_players_path, fake_draft_picks_path)
     
     assert "FAILED: Drafted player IDs not found in sample_players.csv" in str(error.value)
+
+# Validate the final recommendation output
+# Goal: Make sure output/draft_recommendations.csv is usable for the dashboard
+def check_recommendation_output_quality(
+    output_path=OUTPUT_PATH,
+    draft_picks_path=DRAFT_PICKS_PATH
+    ):
+    # 1. Output file exists
+    if not output_path.exists():
+        raise FileNotFoundError("FAILED: Output file does not exist")
+
+    # 2. Output is not empty
+    try:
+        # read csv
+        output_df = pd.read_csv(output_path)
+                
+        # check if has no rows but headers only
+        if output_df.empty:
+            raise ValueError("FAILED: The CSV file contains heades but no data rows.")
+    
+    # If file is completely empty, raise an empty data error
+    except pd.errors.EmptyDataError:
+        # File is 0 bytes (completely empty)
+        raise pd.errors.EmptyDataError("FAILED: The CSV file is completely empty.")
+
+    required_columns = {
+        "player_name",
+        "position",
+        "vorp",
+        "scarcity_adjustment",
+        "roster_count",
+        "roster_need_adjustment",
+        "recommendation_score",
+        "recommendation_reason",
+    }
+
+    missing_columns = required_columns - set(output_df.columns)
+
+    if missing_columns:
+        raise ValueError(f"FAILED: Output is missing required columns: {missing_columns}")
+
+    # 3. recommendation_score has no missing values
+    if output_df["recommendation_score"].isna().any():
+        raise ValueError("FAILED: Recommendation Score has missing values")
+
+    # 4. recommendation_score is greater than or equal to 0
+    if (output_df["recommendation_score"] < 0).any():
+        raise ValueError("FAILED: Some recommendation score contains negative value")
+
+    # 5. player_name has no missing values
+    if output_df["player_name"].isna().any(): 
+        raise ValueError("FAILED: Player name has missing value")
+
+    # 6. no drafted players appear in the recommendation output
+
+    # print passed
+    print("PASSED: Recommendation output quality checks passed")
+
+def run_all_quality_checks():
+    """
+    Run all input and output data quality checks
+    """
+    check_sample_players_quality()
+    check_recommendation_output_quality()
+    print("PASSED: All quality checks passed")

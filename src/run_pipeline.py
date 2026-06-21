@@ -1,6 +1,7 @@
 from src.load import load_sample_players, load_draft_picks
 from src.export_recommendations import export_draft_recommendations
 from src.quality_checks import check_sample_players_quality
+from src.quality_checks import run_all_quality_checks
 
 def run_pipeline():
     """
@@ -17,6 +18,9 @@ def run_pipeline():
 
     # export recommendations CSV
     export_draft_recommendations()
+
+    # check recommendations output quality
+    run_all_quality_checks()
 
     # print success message
     print("Pipeline completed successfully")
