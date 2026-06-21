@@ -1,5 +1,5 @@
 -- 
-CREATE OR REPLACE VIEW recommendation_view AS
+CREATE OR REPLACE VIEW draft_recommendations AS
 
 -- Select position and roster count at each position
 -- for current team (Team 1)
