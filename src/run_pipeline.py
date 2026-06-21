@@ -6,6 +6,9 @@ def run_pipeline():
     """
     run the pipeline
     """
+    # run quality checks
+    check_sample_players_quality()
+    
     # Load sample players
     load_sample_players()
     
@@ -14,9 +17,6 @@ def run_pipeline():
 
     # export recommendations CSV
     export_draft_recommendations()
-
-    # run quality checks
-    check_sample_players_quality()
 
     # print success message
     print("Pipeline completed successfully")
