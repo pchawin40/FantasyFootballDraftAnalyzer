@@ -1,6 +1,5 @@
 # import databases and libraries needed to run export recommendations
 import duckdb
-import pandas as pd
 from pathlib import Path
 
 # set root directory
@@ -18,7 +17,7 @@ def export_recommendations():
     with duckdb.connect(DB_PATH) as con:
         # 2. Run sql/08_create_recommendation_view.sql
         view_sql_path = VIEW_SQL_PATH.read_text()
-        df = con.execute(view_sql_path)
+        con.execute(view_sql_path)
 
         # 3 Query SELECT * FROM recommendation_view
         result = con.execute(    
@@ -26,11 +25,6 @@ def export_recommendations():
         SELECT * FROM recommendation_view
         """
         ).fetchdf()
-
-        # test printing result
-        print("Export Recommendation Result:")
-        print(result)
-        print("--------------------------------")
 
         # 4 Save the result to outputs/draft_recommendations.csv
         OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
