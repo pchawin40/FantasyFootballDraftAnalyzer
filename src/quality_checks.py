@@ -67,7 +67,7 @@ def check_sample_players_quality():
     if not missing_player_ids:
         print("PASSED: Every drafted player id exists in sample_players.csv")
     else:
-        raise ValueError("FAILED: Every drafted player id must exists in sample_players.csv")
+        raise ValueError("FAILED: Some drafted player IDs do not exists in sample_players.csv")
 
 if __name__ == "__main__":
     check_sample_players_quality()
