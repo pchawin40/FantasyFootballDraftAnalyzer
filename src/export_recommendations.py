@@ -8,7 +8,7 @@ DB_PATH = ROOT_DIR / "fantasy_football.duckdb"
 VIEW_SQL_PATH = ROOT_DIR / "sql" / "08_create_recommendation_view.sql"
 OUTPUT_PATH = ROOT_DIR / "outputs" / "draft_recommendations.csv"
 
-def export_recommendations():
+def export_draft_recommendations():
     """
     export draft recommendations from DuckDB database
     """
