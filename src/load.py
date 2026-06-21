@@ -118,27 +118,6 @@ def load_available_players():
     """
     load available players from DuckDB database
     """
-    # read available players from CSV file
-    df = pd.read_csv(PLAYERS_PATH)
-
-    df["season"] = 2026
-    df["vorp"] = df["projected_points"] - df["replacement_points"]
-
-    # create dataframe for available players
-    available_players_df = df [["player_id", "player_name", "position", "nfl_team"]]
-
-    available_players_projections_df = df [
-        [
-            "player_id",
-            "season",
-            "projected_points",
-            "replacement_points",
-            "vorp",
-        ]
-    ].copy()
-
-    available_players_projections_df.insert(0, "projection_id", range(1, len(available_players_projections_df) + 1))
-
     # start up database connection
     with duckdb.connect(DB_PATH) as con:
         schema_sql = SCHEMA_PATH.read_text()
