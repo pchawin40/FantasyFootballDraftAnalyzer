@@ -27,7 +27,6 @@ def test_duplicate_player_id_fails(tmp_path):
         "team_number": [1],
         "player_id": ["p001"],
     })
-    fake_draft_picks_df.to_csv(fake_draft_picks_path, index=False)
 
     # 3. Save both to tmp_path
     fake_players_df.to_csv(fake_players_path, index=False)
@@ -72,3 +71,36 @@ def test_duplicate_drafted_player_id_fails(tmp_path):
         check_sample_players_quality(fake_players_path, fake_draft_picks_path)
     
     assert "FAILED: Duplicate player_id found in sample_draft_picks.csv" in str(error.value)
+
+# test: Drafted player ID does not exist in sample player pool should fail
+def test_not_found_drafted_player(tmp_path):
+    # 1. Create a fake valid players CSV
+    fake_players_path = tmp_path / "fake_players.csv"
+    fake_players_df = pd.DataFrame({
+        "player_id": ["101"],
+        "player_name": ["Player 1"],
+        "position": ["QB"],
+        "nfl_team":["BUF"],
+        "projected_points":[100],
+        "replacement_points":[50]
+    })
+
+    fake_players_df.to_csv(fake_players_path, index=False)
+
+    # 2. Create a fake draft picks CSV with duplicate drafted player_id
+    # that does NOT exist in the player pool
+    fake_draft_picks_path = tmp_path / "fake_draft_picks.csv"
+    fake_draft_picks_df = pd.DataFrame({
+        "round_number": [1],
+        "pick_number": [1],
+        "team_number": [1],
+        "player_id": ["p999"],
+    })
+
+    fake_draft_picks_df.to_csv(fake_draft_picks_path, index=False)
+
+    #3 Run quality check and expect it to fail
+    with pytest.raises(ValueError) as error:
+        check_sample_players_quality(fake_players_path, fake_draft_picks_path)
+    
+    assert "FAILED: Drafted player IDs not found in sample_players.csv" in str(error.value)
