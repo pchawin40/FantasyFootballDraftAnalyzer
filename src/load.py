@@ -123,9 +123,6 @@ def load_available_players():
         schema_sql = SCHEMA_PATH.read_text()
         con.execute(schema_sql)
 
-        con.register("available_players_df",  available_players_df)
-        con.register("projections_df", available_players_projections_df)
-
         available_players_result = con.execute(
             """
             SELECT
