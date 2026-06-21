@@ -105,7 +105,7 @@ Given my draft position, current roster, league scoring settings, and the player
 
 ### Project Objective
 
-Build an end-to-end analytics workflow that transforms player and draft data into an explainable draft recommendation system. The project demonstrates skills relevant to BI analyst, revenue analyst, pricing analyst, and RevOps analyst roles, including data modeling, SQL analytics, pipeline design, metric development, and dashboard reporting.
+Build an end-to-end analytics workflow that transforms player and draft data into an explainable draft recommendation system. The project demonstrates skills for data modeling, SQL analytics, pipeline design, metric development, and dashboard reporting.
 
 ## Data Pipeline and Technologies Used
 
@@ -219,7 +219,7 @@ Depth option
 
 ## Dashboard Overview
 
-The Power BI dashboard, named **Draft Command Center**, presents the recommendation output in a recruiter-friendly BI format.
+The Power BI dashboard, named **Draft Command Center**, presents the recommendation output in a presentable BI format.
 
 ![Draft Command Center](images/draft_command_center.png)
 
@@ -350,15 +350,6 @@ Exit DuckDB:
 .exit
 ```
 
-Save changes to GitHub:
-
-```bash
-git status
-git add .
-git commit -m "Describe what changed"
-git push
-```
-
 ## Conclusion and Next Steps
 
 This project started as a fantasy football draft helper and developed into a small analytics decision engine. It demonstrates how raw player and draft data can be converted into a structured data model, analytical metrics, recommendation logic, and a BI dashboard.
@@ -374,4 +365,4 @@ The current version focuses on sample data and explainable SQL-based logic. The 
 * Improve the Power BI dashboard layout and formatting
 * Explore live draft data through Sleeper API or Yahoo Fantasy API later
 
-The long-term goal is to turn this into a more realistic fantasy draft decision-support system while keeping the project relevant to analytics roles through clear data modeling, reproducible SQL logic, and business-style dashboard reporting.
+The long-term goal is to turn this into a more realistic fantasy draft decision-support system while keeping the project relevant to analytics through clear data modeling, reproducible SQL logic, and business-style dashboard reporting.
