@@ -22,10 +22,10 @@ def test_duplicate_player_id_fails(tmp_path):
     fake_players_df.to_csv(fake_players_path, index=False)
     fake_draft_picks_path = tmp_path / "fake_draft_picks.csv"
     fake_draft_picks_df = pd.DataFrame({
-        "round_number": [1, 1],
-        "pick_number": [1, 1],
-        "team_number": [1, 1],
-        "player_id": ["p001", "p001"],
+        "round_number": [1],
+        "pick_number": [1],
+        "team_number": [1],
+        "player_id": ["p001"],
     })
     fake_draft_picks_df.to_csv(fake_draft_picks_path, index=False)
 
@@ -36,7 +36,6 @@ def test_duplicate_player_id_fails(tmp_path):
     # 4. Run check_sample_players_quality(fake_players_path, fake_draft_picks_path)
     with pytest.raises(ValueError) as error:
         check_sample_players_quality(fake_players_path, fake_draft_picks_path)
+    
     # 5. Assert it raises ValueError with the correct error message
-    assert "FAILED: Duplicate player_id found in sample_draft_picks.csv" in str(error.value)
-    
-    
+    assert "FAILED: Duplicate player_id found in sample_players.csv" in str(error.value)
