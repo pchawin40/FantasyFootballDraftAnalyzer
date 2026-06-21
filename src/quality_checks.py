@@ -26,8 +26,8 @@ def check_sample_players_quality(
     check quality of sample players
     """
     # read sample players from CSV file
-    players_df = pd.read_csv(PLAYERS_PATH)
-    draft_picks_df = pd.read_csv(DRAFT_PICKS_PATH)
+    players_df = pd.read_csv(players_path)
+    draft_picks_df = pd.read_csv(draft_picks_path)
 
     # check for duplicate player_id
     if draft_picks_df["player_id"].duplicated().any():
