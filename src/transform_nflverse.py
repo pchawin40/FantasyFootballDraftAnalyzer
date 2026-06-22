@@ -29,14 +29,20 @@ def transform_nfl_data():
     print("Position counts:")
     print(df["position"].value_counts())
 
+    # sort so the final team value is based on the latest week availablew
+    df = df.sort_values(["player_id", "week"])
+
     # 4. Group weekly player stats into one season-level row per player
     season_df = (
         df.groupby(
-            ["player_id", "player_display_name", "position", "team"],
+            ["player_id"],
             as_index=False
         )
         .agg({
-            "fantasy_points": "sum"
+            "player_display_name": "first",
+            "position": "first",
+            "team": "last",
+            "fantasy_points": "sum",
         })
     )
 
@@ -45,6 +51,14 @@ def transform_nfl_data():
         "team": "nfl_team",
         "fantasy_points": "projected_points",
     })
+
+    duplicate_player_ids = season_df[
+        season_df["player_id"].duplicated(keep=False)
+    ]
+
+    if not duplicate_player_ids.empty:
+        print(duplicate_player_ids.sort_values("player_id"))
+        raise ValueError("Duplicate player_id values found after transformation.")
 
     # 5. Add replacement level points by position
     replacement_points_by_position = {
