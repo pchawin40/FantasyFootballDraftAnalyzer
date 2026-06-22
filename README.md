@@ -13,8 +13,10 @@ A portfolio analytics project that builds a fantasy football draft decision engi
 * [Dashboard Overview](#dashboard-overview)
 * [Key Metrics](#key-metrics)
 * [Project Structure](#project-structure)
+* [Data Quality Check](##data-quality-checks)
 * [Conclusion and Next Steps](#conclusion-and-next-steps)
 * [Data Dictionary](docs/data_dictionary.md)
+
 
 ## Getting Started
 
@@ -66,6 +68,8 @@ This command:
 3. Creates or refreshes the DuckDB database
 4. Builds the recommendation SQL view
 5. Exports the final dashboard-ready CSV to `outputs/draft_recommendations.csv`
+
+The pipeline validates both the input files and final dashboard output before completion.
 
 ### Run Tests
 
@@ -313,6 +317,24 @@ recommendation_score = VORP + scarcity_adjustment + roster_need_adjustment
 └── tests/
     └── test_scoring.py
 ```
+
+## Data Quality Checks
+Input validation:
+- Duplicate player IDs
+- Missing player names
+- Missing positions
+- Negative projected/replacement points
+- Drafted player IDs must exist in player pool
+- Duplicate drafted player IDs
+
+Output validation:
+- Recommendation output file exists
+- Output is not empty
+- Required dashboard columns exist
+- Recommendation scores are not missing
+- Recommendations scores are non-negative
+- Player names are not missing
+- Drafted players do not appear in recommendation output
 
 ## Common Commands
 
