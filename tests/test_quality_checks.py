@@ -184,5 +184,5 @@ def test_drafted_player_in_recommendation_output_fails(tmp_path):
             fake_draft_picks_path
         )
 
-        # 4. Confirm it failed for the expected reason
-        assert ("FAILED: Drafted players still appear in the recommendation output") in str(error.value)
+    # 4. Confirm it failed for the expected reason
+    assert ("FAILED: Drafted players still appear in the recommendation output") in str(error.value)
