@@ -109,6 +109,35 @@ def test_not_found_drafted_player(tmp_path):
 
 def test_recommendation_output_quality():
     """
-    Test recommendation output and its quality
+    Positive Test: Test recommendation output and its quality
     """
     check_recommendation_output_quality()
+
+def test_recommendation_output_missing_score_fails(tmp_path):
+    """
+    Negative Test: Testing recommendation output expecting it to fail
+    """
+    # Create a fake output CSV
+    fake_output_path = tmp_path / "fake_draft_recommendations.csv"
+
+    # Include most columns
+    fake_output_df = pd.DataFrame({
+        "player_name": ["Player 1"],
+        "position": ["QB"],
+        "vorp": [50],
+        "scarcity_adjustments": [1.25],
+        "roster_count": [0],
+        "roster_need_adjustment": [8],
+        # Intentionally leave out recommendation score (negative test)
+        "recommendation_reason": ["High VORP + roster need"]
+    })
+
+    fake_output_df.to_csv(fake_output_path, index=False)
+
+    # Run check_recommendation_output_quality(fake_output_path)
+    with pytest.raises(ValueError) as error:
+        check_recommendation_output_quality(fake_output_path)
+
+    # Expect ValueError
+    # Assert the error message with missing required columns
+    assert "FAILED: Output is missing required columns" in str(error.value)
