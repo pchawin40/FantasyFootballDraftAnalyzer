@@ -22,7 +22,7 @@ def run_pipeline():
     export_draft_recommendations()
 
     # check recommendations output quality
-    run_all_quality_checks()
+    check_recommendation_output_quality()
 
     # print success message
     print("Pipeline completed successfully")
