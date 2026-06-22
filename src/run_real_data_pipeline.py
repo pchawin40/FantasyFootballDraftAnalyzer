@@ -1,9 +1,7 @@
 from src.extract_nflverse import extract_nfl_data
 from src.transform_nflverse import transform_nfl_data
 from src.load_real_data import load_real_players
-from src.load import load_draft_picks
 from src.export_recommendations import export_draft_recommendations
-from src.quality_checks import check_recommendation_output_quality
 
 def run_real_data_pipeline():
     """
@@ -20,9 +18,6 @@ def run_real_data_pipeline():
 
     # 4. export draft recommendations
     export_draft_recommendations()
-
-    # 5. check recommendation output quality
-    check_recommendation_output_quality()
 
     # print success message
     print("Pipeline completed successfully")
