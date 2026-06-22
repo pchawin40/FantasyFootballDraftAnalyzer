@@ -33,13 +33,7 @@ def extract_nfl_data():
     print("raw player stats preview")
     print(df.head())
 
-    # 4. Save raw file
-    RAW_DIR.mkdir(parents=True, exist_ok=True)
-    df.to_csv(RAW_OUTPUT_PATH, index=False)
-
-    print(f"Saved raw player stats to {RAW_OUTPUT_PATH}")
-
-    # 5. Save a filtered version for fantasy positions
+    # 4. Save a filtered version for fantasy positions
     fantasy_positions = ["QB", "RB", "WR", "TE"]
 
     if "position" not in df.columns:
