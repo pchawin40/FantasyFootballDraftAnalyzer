@@ -1,5 +1,9 @@
-# Python
+# Python virtual environment
 .venv/
+venv/
+env/
+
+# Python cache
 __pycache__/
 *.pyc
 .pytest_cache/
@@ -21,7 +25,7 @@ data/processed/
 *.pbix
 *.pbit
 
-# OS / editor files
+# OS/editor
 .DS_Store
 Thumbs.db
 .vscode/
