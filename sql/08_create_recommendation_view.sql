@@ -54,7 +54,9 @@ JOIN fact_player_projection fp USING (player_id)
 LEFT JOIN fact_draft_pick fdp USING (player_id)
 LEFT JOIN team_roster_summary trs USING (position)
 LEFT JOIN position_summary ps USING (position)
-WHERE fdp.player_id IS NULL
+WHERE 
+    fdp.player_id IS NULL 
+    AND fp.vorp > 0
 ORDER BY 
     recommendation_score DESC,
     player_name ASC;
