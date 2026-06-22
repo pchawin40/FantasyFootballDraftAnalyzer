@@ -97,6 +97,7 @@ def check_recommendation_output_quality(
         raise pd.errors.EmptyDataError("FAILED: The CSV file is completely empty.")
 
     required_columns = {
+        "player_id",
         "player_name",
         "position",
         "vorp",
