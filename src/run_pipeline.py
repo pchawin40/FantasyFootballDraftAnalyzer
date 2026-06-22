@@ -1,7 +1,9 @@
 from src.load import load_sample_players, load_draft_picks
 from src.export_recommendations import export_draft_recommendations
-from src.quality_checks import check_sample_players_quality
-from src.quality_checks import run_all_quality_checks
+from src.quality_checks import (
+    check_sample_players_quality,
+    check_recommendation_output_quality
+)
 
 def run_pipeline():
     """
