@@ -141,3 +141,48 @@ def test_recommendation_output_missing_score_fails(tmp_path):
     # Expect ValueError
     # Assert the error message with missing required columns
     assert "FAILED: Output is missing required columns" in str(error.value)
+
+def test_drafted_player_in_recommendation_output_fails(tmp_path):
+    """
+    Negative test:
+    If the recommendation output includes p001 and p001 is also in draft picks, the output
+    quality check should fail
+    """
+    #1 Create fake recommendation output CSV
+    fake_output_path = tmp_path / "fake_draft_recommendation.csv"
+
+    fake_output_df = pd.DataFrame({
+        "player_id": ["p001"],
+        "player_name": ["Player 1"],
+        "position": ["RB"],
+        "vorp": [100],
+        "scarcity_adjustment": [1.25],
+        "roster_count": [0],
+        "roster_need_adjustment": [8],
+        "recommendation_score": [109.25],
+        "recommendation_reason": ["High VORP + roster need"],
+    })
+
+    fake_output_df.to_csv(fake_output_path, index=False)
+
+    # 2. Create fake draft picks CSV where p001 has already been drafted
+    fake_draft_picks_path = tmp_path / "fake_draft_picks.csv"
+
+    fake_draft_picks_df = pd.DataFrame({
+        "round_number": [1],
+        "pick_number": [1],
+        "team_number": [1],
+        "player_id": ["p001"]
+    })
+
+    fake_draft_picks_df.to_csv(fake_draft_picks_path, index=False)
+
+    # 3. Run output quality check and expect it to fail
+    with pytest.raises(ValueError) as error:
+        check_recommendation_output_quality(
+            fake_output_path,
+            fake_draft_picks_path
+        )
+
+        # 4. Confirm it failed for the expected reason
+        assert ("FAILED: Drafted players found in recommendation output") in str(error.value)

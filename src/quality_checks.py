@@ -76,7 +76,8 @@ def check_sample_players_quality(
 # Validate the final recommendation output
 # Goal: Make sure output/draft_recommendations.csv is usable for the dashboard
 def check_recommendation_output_quality(
-    output_path=OUTPUT_PATH
+    output_path=OUTPUT_PATH,
+    draft_picks_path=DRAFT_PICKS_PATH
     ):
     # 1. Output file exists
     if not output_path.exists():
@@ -86,7 +87,8 @@ def check_recommendation_output_quality(
     try:
         # read csv
         output_df = pd.read_csv(output_path)
-                
+        draft_picks_df = pd.read_csv(draft_picks_path)
+
         # check if has no rows but headers only
         if output_df.empty:
             raise ValueError("FAILED: The CSV file contains headers but no data rows.")
@@ -126,6 +128,13 @@ def check_recommendation_output_quality(
         raise ValueError("FAILED: Player name has missing value")
 
     # 6. no drafted players appear in the recommendation output
+    drafted_player_ids = set(draft_picks_df["player_id"])
+    recommended_player_ids = set(output_df["player_id"])
+
+    overlap = drafted_player_ids & recommended_player_ids
+
+    if overlap:
+        raise ValueError(f"FAILED: Drafted players still appear in the recommendation output: {overlap}")
 
     # print passed
     print("PASSED: Recommendation output quality checks passed")
