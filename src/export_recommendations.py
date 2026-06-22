@@ -22,7 +22,7 @@ def export_draft_recommendations():
         # 3 Query SELECT * FROM recommendation_view
         result = con.execute(    
         """
-        SELECT * FROM recommendation_view
+        SELECT * FROM draft_recommendations
         """
         ).fetchdf()
 

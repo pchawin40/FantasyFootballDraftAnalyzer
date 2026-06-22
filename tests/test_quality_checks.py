@@ -125,7 +125,7 @@ def test_recommendation_output_missing_score_fails(tmp_path):
         "player_name": ["Player 1"],
         "position": ["QB"],
         "vorp": [50],
-        "scarcity_adjustments": [1.25],
+        "scarcity_adjustment": [1.25],
         "roster_count": [0],
         "roster_need_adjustment": [8],
         # Intentionally leave out recommendation score (negative test)

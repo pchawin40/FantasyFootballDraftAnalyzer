@@ -24,7 +24,8 @@ team_roster_summary AS (
     GROUP BY dp.position
 )
 SELECT
-    -- Select player name, position, vorp, scarcity adjustment, roster count, roster need adjustment, recommendation score
+    -- Select player id, name, position, vorp, scarcity adjustment, roster count, roster need adjustment, recommendation score
+    dp.player_id,
     dp.player_name,
     dp.position,
     fp.vorp,
