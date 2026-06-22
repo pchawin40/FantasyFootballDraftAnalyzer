@@ -52,6 +52,9 @@ def transform_nfl_data():
         "fantasy_points": "projected_points",
     })
 
+    # remove players with zero or negative projected points
+    season_df = season_df[season_df["projected_points"] > 0].copy()
+
     duplicate_player_ids = season_df[
         season_df["player_id"].duplicated(keep=False)
     ]

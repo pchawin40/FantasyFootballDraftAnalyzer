@@ -15,6 +15,7 @@ from pathlib import Path
 # set root directory
 ROOT_DIR = Path(__file__).resolve().parents[1]
 PLAYERS_PATH = ROOT_DIR / "data" / "sample_players.csv"
+REAL_PLAYERS_PATH = ROOT_DIR / "data" / "processed" / "player_projections_2025.csv"
 DRAFT_PICKS_PATH = ROOT_DIR / "data" / "sample_draft_picks.csv"
 OUTPUT_PATH = ROOT_DIR / "outputs" / "draft_recommendations.csv"
 
@@ -138,6 +139,79 @@ def check_recommendation_output_quality(
 
     # print passed
     print("PASSED: Recommendation output quality checks passed")
+
+def check_real_player_projections_quality():
+    """
+    Validate file player_projections_2025.csv
+    """
+    # check whether file exists
+    if not REAL_PLAYERS_PATH.exists():
+        raise FileNotFoundError("FAILED: player_projections_2025.csv does not exist")
+
+    # check if file is not empty
+    if REAL_PLAYERS_PATH.read_text().strip() == "":
+        raise ValueError("FAILED: player_projections_2025.csv is empty")
+
+    # read CSV into DataFrame
+    df = pd.read_csv(REAL_PLAYERS_PATH)
+
+    # check if required columns exist
+    if df.empty:
+        raise ValueError("FAILED: player_projections_2025.csv has no rows")
+
+    # check if required columns exist
+    required_columns = {
+        "player_id",
+        "player_name",
+        "position",
+        "nfl_team",
+        "projected_points",
+        "replacement_points",
+    }
+    missing_columns = required_columns - set(df.columns)
+
+    if missing_columns:
+        raise ValueError(f"FAILED: File is missing required columns: {missing_columns}")
+
+    # check player_id has no missing values
+    if df["player_id"].isna().any():
+        raise ValueError("FAILED: Player ID has missing values")
+
+    # player id has no duplicates
+    if df["player_id"].duplicated().any():
+        raise ValueError("FAILED: Player ID has duplicates")
+
+    # player name has no missing values
+    if df["player_name"].isna().any():
+        raise ValueError("FAILED: Player name has missing values")
+
+    # position is only QB/RB/WR/TE
+
+    # position is only QB/RB/WR/TE
+    valid_positions = ["QB", "RB", "WR", "TE"]
+
+    if not df["position"].isin(valid_positions).all():
+        bad_positions = df.loc[~df["position"].isin(valid_positions), "position"].unique()
+        raise ValueError(f"FAILED: Position is not only QB/RB/WR/TE: {bad_positions}")
+
+    # projected points is not missing
+    if df["projected_points"].isna().any():
+        raise ValueError("FAILED: Projected points has missing values")
+
+    # projected points is non negative
+    if df["projected_points"].lt(0).any():
+        raise ValueError("FAILED: Projected points is negative")
+
+    # replacement points is not missing
+    if df["replacement_points"].isna().any():
+        raise ValueError("FAILED: Replacement points has missing values")
+
+    # replacement points is non negative
+    if df["replacement_points"].lt(0).any():
+        raise ValueError("FAILED: Replacement points is negative")
+
+    # print passed
+    print("PASSED: Real player projections quality checks passed")
 
 if __name__ == "__main__":
     check_sample_players_quality()
