@@ -39,8 +39,7 @@ def extract_nfl_data():
 
     # 3. Filter to offensive fantasy positions: QB, RB, WR, TE
     
-    # filter by positions
-    
+    # filter by positions    
 
     # 4. Save raw file to data/raw/player_stats_2025.csv
 
