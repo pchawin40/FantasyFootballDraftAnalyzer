@@ -1,0 +1,31 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Local database files
+*.duckdb
+*.duckdb.wal
+
+# Raw / large data files
+data/raw/
+data/processed/
+
+# Keep small sample data tracked
+!data/sample_players.csv
+!data/sample_draft_picks.csv
+
+# Power BI local files
+*.pbix
+*.pbit
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
