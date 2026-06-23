@@ -5,6 +5,7 @@ A portfolio analytics project that builds a fantasy football draft decision engi
 
 **Table of Contents**
 * [Getting Started](#getting-started)
+* [Skills Demonstrated](##skills-demonstrated)
 * [Fantasy Football Draft Analyzer at a Glance](#fantasy-football-draft-analyzer-at-a-glance)
 * [Analytics Objective](#analytics-objective)
 * [Data Pipeline and Technologies Used](#data-pipeline-and-technologies-used)
@@ -19,6 +20,15 @@ A portfolio analytics project that builds a fantasy football draft decision engi
 * [Conclusion and Next Steps](#conclusion-and-next-steps)
 * [Data Dictionary](docs/data_dictionary.md)
 
+## Skills Demonstrated
+- Built an end-to-end analytics pipeline using Python, pandas, DuckDB, and SQL
+- Designed a star-schema-inspired data model for player projections and draft picks
+- Created SQL logic for VORP, position scarcity, roster need, and recommendation scoring
+- Added real NFL data using nflverse-derived player stats
+- Built data quality checks for source files, transformed data, draft picks, and final outputs
+- Wrote pytest tests for positive and negative validation cases
+- Automated test execution with GitHub Actions
+- Built a Power BI dashboard for draft-room decision support
 
 ## Getting Started
 
