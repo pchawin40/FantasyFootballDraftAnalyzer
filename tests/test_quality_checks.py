@@ -1,7 +1,8 @@
 from src.quality_checks import (
     check_sample_players_quality, 
     check_recommendation_output_quality,
-    check_real_player_projections_quality
+    check_real_player_projections_quality,
+    check_real_draft_picks_quality
 )
 import pandas as pd
 import pytest
@@ -253,3 +254,106 @@ def test_real_player_projections_bad_position_fails(tmp_path):
         check_real_player_projections_quality(fake_real_players_path)
 
     assert "FAILED: Position is not only QB/RB/WR/TE" in str(error.value)
+
+def test_real_draft_picks_quality_passes(tmp_path):
+    """
+    Positive test:
+    Real draft picks should pass when drafted player IDs exist in real player projections
+    """
+    fake_real_players_path = tmp_path / "fake_player_projections_2025.csv"
+    fake_real_draft_picks_path = tmp_path / "fake_real_draft_picks_2025.csv"
+
+    fake_real_players_df = pd.DataFrame({
+        "player_id": ["00-0034857", "00-0033280", "00-0036223"],
+        "player_name": ["Player 1", "Player 2", "Player 3"],
+        "position": ["QB", "RB", "WR"],
+        "nfl_team": ["BUF", "SF", "DAL"],
+        "projected_points": [300.0, 250.0, 230.0],
+        "replacement_points": [260, 155, 145],
+    })
+
+    fake_real_draft_picks_df = pd.DataFrame({
+        "round_number": [1, 1, 1],
+        "pick_number": [1, 2, 3],
+        "team_number": [1, 2, 3],
+        "player_id": ["00-0034857", "00-0033280", "00-0036223"],
+    })
+
+    fake_real_players_df.to_csv(fake_real_players_path, index=False)
+    fake_real_draft_picks_df.to_csv(fake_real_draft_picks_path, index=False)
+
+    check_real_draft_picks_quality(
+        fake_real_draft_picks_path,
+        fake_real_players_path
+    )
+
+def test_real_draft_picks_duplicate_player_id_fails(tmp_path):
+    """
+    Negative test:
+    Real draft picks should fail if the same player_id is drafted twice
+    """
+    fake_real_players_path = tmp_path / "fake_player_projections_2025.csv"
+    fake_real_draft_picks_path = tmp_path / "fake_real_draft_picks_2025.csv"
+
+    fake_real_players_df = pd.DataFrame({
+        "player_id": ["00-0034857"],
+        "player_name": ["Player 1"],
+        "position": ["QB"],
+        "nfl_team": ["BUF"],
+        "projected_points": [300.0],
+        "replacement_points": [260],
+    })
+
+    fake_real_draft_picks_df = pd.DataFrame({
+        "round_number": [1, 1],
+        "pick_number": [1, 2],
+        "team_number": [1, 2],
+        "player_id": ["00-0034857", "00-0034857"],
+    })
+
+    fake_real_players_df.to_csv(fake_real_players_path, index=False)
+    fake_real_draft_picks_df.to_csv(fake_real_draft_picks_path, index=False)
+
+    with pytest.raises(ValueError) as error:
+        check_real_draft_picks_quality(
+            fake_real_draft_picks_path,
+            fake_real_players_path
+        )
+
+    assert "FAILED: Player ID has duplicates" in str(error.value)
+
+def test_real_draft_picks_missing_player_id_from_real_players_fails(tmp_path):
+    """
+    Negative test:
+    Real draft picks should fail if a drafted player_id does not exist in real player projections.
+    """
+    fake_real_players_path = tmp_path / "fake_player_projections_2025.csv"
+    fake_real_draft_picks_path = tmp_path / "fake_real_draft_picks_2025.csv"
+
+    fake_real_players_df = pd.DataFrame({
+        "player_id": ["00-0034857"],
+        "player_name": ["Player 1"],
+        "position": ["QB"],
+        "nfl_team": ["BUF"],
+        "projected_points": [300.0],
+        "replacement_points": [260],
+    })
+
+    fake_real_draft_picks_df = pd.DataFrame({
+        "round_number": [1],
+        "pick_number": [1],
+        "team_number": [1],
+        "player_id": ["00-9999999"],
+    })
+
+    fake_real_players_df.to_csv(fake_real_players_path, index=False)
+    fake_real_draft_picks_df.to_csv(fake_real_draft_picks_path, index=False)
+
+    with pytest.raises(ValueError) as error:
+        check_real_draft_picks_quality(
+            fake_real_draft_picks_path,
+            fake_real_players_path
+        )
+
+    assert "FAILED: Drafted player IDs not found in player_projections_2025.csv" in str(error.value)
+    
