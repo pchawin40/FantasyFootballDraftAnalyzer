@@ -8,12 +8,14 @@ A portfolio analytics project that builds a fantasy football draft decision engi
 * [Fantasy Football Draft Analyzer at a Glance](#fantasy-football-draft-analyzer-at-a-glance)
 * [Analytics Objective](#analytics-objective)
 * [Data Pipeline and Technologies Used](#data-pipeline-and-technologies-used)
+* [Real NFL Data Pipeline](#real-nfl-data-pipeline)
 * [Data Model Overview](#data-model-overview)
 * [SQL Analytics Workflow](#sql-analytics-workflow)
 * [Dashboard Overview](#dashboard-overview)
 * [Key Metrics](#key-metrics)
 * [Project Structure](#project-structure)
-* [Data Quality Check](##data-quality-checks)
+* [Data Quality Checks](#data-quality-checks)
+* [Common Commands](#common-commands)
 * [Conclusion and Next Steps](#conclusion-and-next-steps)
 * [Data Dictionary](docs/data_dictionary.md)
 
@@ -53,9 +55,9 @@ Install the required packages:
 pip install -r requirements.txt
 ```
 
-### Run the Full Analytics Pipeline
+### Run the Sample Data Pipeline
 
-The main project pipeline can be run with one command:
+The original project pipeline can be run with one command:
 
 ```bash
 python -m src.run_pipeline
@@ -69,7 +71,37 @@ This command:
 4. Builds the recommendation SQL view
 5. Exports the final dashboard-ready CSV to `outputs/draft_recommendations.csv`
 
-The pipeline validates both the input files and final dashboard output before completion.
+The sample pipeline validates both the input files and final dashboard output before completion.
+
+### Run the Real NFL Data Pipeline
+
+I also added a real-data version using nflverse data. This is separate from the sample pipeline so the demo data still works while I keep building out the real workflow.
+
+```bash
+python -m src.run_real_data_pipeline
+```
+
+This command:
+
+1. Pulls 2025 player stats from nflverse
+2. Filters to fantasy positions only: QB, RB, WR, TE
+3. Turns weekly stats into one season-level row per player
+4. Uses historical fantasy points as a baseline projected points value
+5. Adds replacement points by position
+6. Loads the model-ready player data into DuckDB
+7. Exports the final recommendation output
+
+The processed real player file is saved here:
+
+```text
+data/processed/player_projections_2025.csv
+```
+
+The final recommendation output is still saved here:
+
+```text
+outputs/draft_recommendations.csv
+```
 
 ### Run Tests
 
@@ -80,8 +112,10 @@ pytest
 Expected result:
 
 ```text
-2 passed
+all tests should pass
 ```
+
+GitHub Actions also runs the test suite automatically on push and pull request.
 
 ## Fantasy Football Draft Analyzer at a Glance
 
@@ -116,15 +150,16 @@ Build an end-to-end analytics workflow that transforms player and draft data int
 
 This project uses a lightweight local analytics stack:
 
-* **Python**: Loads sample data, refreshes the pipeline, and exports dashboard-ready output
+* **Python**: Loads sample data, pulls real NFL data, refreshes the pipeline, and exports dashboard-ready output
 * **Pandas**: Handles CSV-based data transformations
 * **DuckDB**: Serves as the local analytical database
 * **SQL**: Builds schemas, views, player rankings, and recommendation logic
 * **Power BI Desktop**: Creates the Draft Command Center dashboard
-* **Pytest**: Validates scoring and value calculations
+* **Pytest**: Validates scoring, value calculations, and quality checks
+* **GitHub Actions**: Runs tests automatically on push and pull request
 * **GitHub**: Stores project code, documentation, and dashboard artifacts
 
-### Pipeline Flow
+### Sample Pipeline Flow
 
 ```text
 sample_players.csv
@@ -144,6 +179,62 @@ draft_recommendations.csv
         v
 Power BI dashboard
 ```
+
+### Real Data Pipeline Flow
+
+```text
+nflverse player stats
+        |
+        v
+extract_nflverse.py
+        |
+        v
+raw player stats CSV
+        |
+        v
+transform_nflverse.py
+        |
+        v
+player_projections_2025.csv
+        |
+        v
+load_real_data.py
+        |
+        v
+DuckDB tables
+        |
+        v
+SQL recommendation view
+        |
+        v
+draft_recommendations.csv
+```
+
+## Real NFL Data Pipeline
+
+The first version of this project used sample data because I wanted the scoring, SQL logic, and dashboard to work first before adding messier real data.
+
+After that was working, I added a real-data pipeline using nflverse player stats. The goal is not to make a perfect fantasy projection model yet. Right now the real-data workflow uses prior-season fantasy points as a simple baseline projection so the rest of the draft analyzer can run with real NFL player data.
+
+The real-data scripts are:
+
+* `src/extract_nflverse.py`: pulls player stats from nflverse and saves raw CSV files
+* `src/transform_nflverse.py`: filters QB/RB/WR/TE and creates a model-ready player projection file
+* `src/load_real_data.py`: loads the real projection file into the same DuckDB tables used by the sample pipeline
+* `src/run_real_data_pipeline.py`: runs the full real-data workflow
+
+The real projection file has the same main structure as the sample player file:
+
+```text
+player_id
+player_name
+position
+nfl_team
+projected_points
+replacement_points
+```
+
+That part is important because it lets the same SQL recommendation logic work for both the sample version and the real-data version.
 
 ## Data Model Overview
 
@@ -285,16 +376,24 @@ recommendation_score = VORP + scarcity_adjustment + roster_need_adjustment
 ```text
 .
 ├── README.md
+├── .github/
+│   └── workflows/
+│       └── tests.yml
 ├── config/
 │   └── league_settings.yaml
 ├── dashboard/
 ├── data/
+│   ├── raw/
+│   │   ├── player_stats_2025.csv
+│   │   └── player_stats_2025_fantasy_positions.csv
+│   ├── processed/
+│   │   └── player_projections_2025.csv
 │   ├── sample_draft_picks.csv
 │   └── sample_players.csv
+├── docs/
+│   └── data_dictionary.md
 ├── images/
 │   └── draft_command_center.png
-├── notebooks/
-│   └── exploration.ipynb
 ├── outputs/
 │   └── draft_recommendations.csv
 ├── requirements.txt
@@ -309,16 +408,20 @@ recommendation_score = VORP + scarcity_adjustment + roster_need_adjustment
 │   └── 08_create_recommendation_view.sql
 ├── src/
 │   ├── export_recommendations.py
-│   ├── extract.py
+│   ├── extract_nflverse.py
 │   ├── load.py
-│   ├── projections.py
+│   ├── load_real_data.py
+│   ├── quality_checks.py
 │   ├── run_pipeline.py
-│   └── transform.py
+│   ├── run_real_data_pipeline.py
+│   └── transform_nflverse.py
 └── tests/
+    ├── test_quality_checks.py
     └── test_scoring.py
 ```
 
 ## Data Quality Checks
+
 Input validation:
 - Duplicate player IDs
 - Missing player names
@@ -326,6 +429,17 @@ Input validation:
 - Negative projected/replacement points
 - Drafted player IDs must exist in player pool
 - Duplicate drafted player IDs
+
+Real player projection validation:
+- Real projection file exists
+- File is not empty
+- Required columns exist
+- Player IDs are not missing
+- Player IDs are not duplicated
+- Player names are not missing
+- Positions are only QB, RB, WR, TE
+- Projected points are not missing or negative
+- Replacement points are not missing or negative
 
 Output validation:
 - Recommendation output file exists
@@ -344,10 +458,16 @@ Activate the virtual environment:
 source .venv/bin/activate
 ```
 
-Run the full pipeline:
+Run the sample-data pipeline:
 
 ```bash
 python -m src.run_pipeline
+```
+
+Run the real NFL data pipeline:
+
+```bash
+python -m src.run_real_data_pipeline
 ```
 
 Run tests:
@@ -366,7 +486,7 @@ Run a SQL file manually inside DuckDB:
 
 ```sql
 .read sql/08_create_recommendation_view.sql
-SELECT * FROM recommendation_view;
+SELECT * FROM draft_recommendations;
 ```
 
 Exit DuckDB:
@@ -379,10 +499,11 @@ Exit DuckDB:
 
 This project started as a fantasy football draft helper and developed into a small analytics decision engine. It demonstrates how raw player and draft data can be converted into a structured data model, analytical metrics, recommendation logic, and a BI dashboard.
 
-The current version focuses on sample data and explainable SQL-based logic. The next improvements are:
+The current version has two workflows: a stable sample-data pipeline and a real NFL data pipeline using nflverse player stats. The real-data version is still simple on purpose. It uses prior-season fantasy points as a baseline projection so I can keep the focus on data modeling, SQL logic, pipeline design, and dashboard output first.
 
-* Expand the sample player pool from 10 players to 40-50 players
-* Add historical NFL or fantasy data from a public data source
+Next improvements are:
+
+* Create real draft-pick data that uses nflverse player IDs
 * Add more realistic replacement-level calculations by position
 * Add bye week and risk indicators
 * Add draft round and pick context
