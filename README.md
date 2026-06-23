@@ -5,7 +5,7 @@ A portfolio analytics project that builds a fantasy football draft decision engi
 
 **Table of Contents**
 * [Getting Started](#getting-started)
-* [Skills Demonstrated](##skills-demonstrated)
+* [Skills Demonstrated](#skills-demonstrated)
 * [Fantasy Football Draft Analyzer at a Glance](#fantasy-football-draft-analyzer-at-a-glance)
 * [Analytics Objective](#analytics-objective)
 * [Data Pipeline and Technologies Used](#data-pipeline-and-technologies-used)
@@ -513,7 +513,7 @@ The current version has two workflows: a stable sample-data pipeline and a real 
 
 Next improvements are:
 
-* Create real draft-pick data that uses nflverse player IDs
+* Add larger simulated drafted scenarios using nflverse player IDs
 * Add more realistic replacement-level calculations by position
 * Add bye week and risk indicators
 * Add draft round and pick context
