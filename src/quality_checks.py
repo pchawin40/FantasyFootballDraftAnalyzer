@@ -281,3 +281,4 @@ if __name__ == "__main__":
     check_sample_players_quality()
     check_recommendation_output_quality()
     check_real_player_projections_quality()
+    check_real_draft_picks_quality()
