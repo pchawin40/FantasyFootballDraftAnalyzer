@@ -1,4 +1,6 @@
 # Fantasy Football Draft Analyzer
+[![Python Tests](https://github.com/pchawin40/FantasyFootballDraftAnalyzer/actions/workflows/tests.yml/badge.svg)](https://github.com/pchawin40/FantasyFootballDraftAnalyzer/actions/workflows/tests.yml)
+
 *By Chawin Pathompornvivat*
 
 A portfolio analytics project that builds a fantasy football draft decision engine using Python, DuckDB, SQL, and Power BI. The project ranks available players in a 12-team half-PPR draft by combining value over replacement, position scarcity, current roster need, and recommendation reason.

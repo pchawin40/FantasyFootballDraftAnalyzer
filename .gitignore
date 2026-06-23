@@ -12,6 +12,7 @@ __pycache__/
 # Local database files
 *.duckdb
 *.duckdb.wal
+*.db
 
 # Raw / large data files
 data/raw/
