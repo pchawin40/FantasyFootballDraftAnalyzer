@@ -17,6 +17,7 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 PLAYERS_PATH = ROOT_DIR / "data" / "sample_players.csv"
 REAL_PLAYERS_PATH = ROOT_DIR / "data" / "processed" / "player_projections_2025.csv"
 DRAFT_PICKS_PATH = ROOT_DIR / "data" / "sample_draft_picks.csv"
+REAL_DRAFT_PICKS_PATH = ROOT_DIR / "data" / "real_draft_picks_2025.csv"
 OUTPUT_PATH = ROOT_DIR / "outputs" / "draft_recommendations.csv"
 
 # read sample players
@@ -159,7 +160,6 @@ def check_real_player_projections_quality(real_players_path=REAL_PLAYERS_PATH):
     if df.empty:
         raise ValueError("FAILED: player_projections_2025.csv has no rows")
 
-    # check if required columns exist
     required_columns = {
         "player_id",
         "player_name",
@@ -186,8 +186,6 @@ def check_real_player_projections_quality(real_players_path=REAL_PLAYERS_PATH):
         raise ValueError("FAILED: Player name has missing values")
 
     # position is only QB/RB/WR/TE
-
-    # position is only QB/RB/WR/TE
     valid_positions = ["QB", "RB", "WR", "TE"]
 
     if not df["position"].isin(valid_positions).all():
@@ -212,6 +210,72 @@ def check_real_player_projections_quality(real_players_path=REAL_PLAYERS_PATH):
 
     # print passed
     print("PASSED: Real player projections quality checks passed")
+
+def check_real_draft_picks_quality(
+    real_draft_picks_path=REAL_DRAFT_PICKS_PATH,
+    real_players_path=REAL_PLAYERS_PATH
+    ):
+    # check file exists
+    if not real_draft_picks_path.exists():
+        raise FileNotFoundError("FAILED: real_draft_picks_2025.csv does not exist")
+    if not real_players_path.exists():
+        raise FileNotFoundError("FAILED: player_projections_2025.csv does not exist")   
+
+    # check file is not empty
+    if real_draft_picks_path.read_text().strip() == "":
+        raise ValueError("FAILED: real_draft_picks_2025.csv is empty")
+
+    # read CSV into DataFrame
+    df = pd.read_csv(real_draft_picks_path)
+    
+    # check required columns exist
+    if df.empty:
+        raise ValueError("FAILED: real_draft_picks_2025.csv has no rows")
+    required_columns= {
+        "round_number",
+        "pick_number",
+        "team_number",
+        "player_id"
+    }
+
+    missing_columns = required_columns - set(df.columns)
+
+    if missing_columns:
+        raise ValueError(f"FAILED: File is missing required columns: {missing_columns}")
+
+    # check no duplicate drafted player_id
+    if df["player_id"].duplicated().any():
+        raise ValueError("FAILED: Player ID has duplicates")
+
+    # check no missing player_id
+    if df["player_id"].isna().any():
+        raise ValueError("FAILED: Player ID has missing values")
+
+    # check round_number / pick_number / team_number are not missing
+    if df["round_number"].isna().any():
+        raise ValueError("FAILED: Round number has missing values")
+    
+    if df["pick_number"].isna().any():
+        raise ValueError("FAILED: Pick number has missing values")
+    
+    if df["team_number"].isna().any():
+        raise ValueError("FAILED: Team number has missing values")
+
+
+
+    # read real player projections
+    real_players_df = pd.read_csv(real_players_path)
+
+    # check every drafted player_id exists in data/processed/player_projections_2025.csv
+    missing_player_ids = set(df["player_id"]) - set(real_players_df["player_id"])
+
+    if missing_player_ids:
+        raise ValueError(
+            f"FAILED: Drafted player IDs not found in player_projections_2025.csv: {missing_player_ids}"
+        )
+    
+    print("PASSED: Real draft picks quality checks passed")
+
 
 if __name__ == "__main__":
     check_sample_players_quality()
