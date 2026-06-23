@@ -3,6 +3,8 @@
 
 A portfolio analytics project that builds a fantasy football draft decision engine using Python, DuckDB, SQL, and Power BI. The project ranks available players in a 12-team half-PPR draft by combining value over replacement, position scarcity, current roster need, and recommendation reason.
 
+*This is not meant to beat professional fantasy projections; it demonstrates data modeling, SQL analytics, validation, and dashboard reporting.*
+
 **Table of Contents**
 * [Getting Started](#getting-started)
 * [Skills Demonstrated](#skills-demonstrated)
