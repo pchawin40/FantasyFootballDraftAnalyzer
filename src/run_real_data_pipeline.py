@@ -4,7 +4,10 @@ from src.load_real_data import load_real_players
 from src.export_recommendations import export_draft_recommendations
 from src.quality_checks import (
     check_real_player_projections_quality,
-    check_real_draft_picks_quality
+    check_real_draft_picks_quality,
+    check_recommendation_output_quality,
+    OUTPUT_PATH,
+    REAL_DRAFT_PICKS_PATH
 )
 from src.load_real_draft_picks import load_real_draft_picks
 
@@ -32,6 +35,12 @@ def run_real_data_pipeline():
 
     # export draft recommendations
     export_draft_recommendations()
+
+    # check recommendation output quality
+    check_recommendation_output_quality(
+        OUTPUT_PATH,
+        REAL_DRAFT_PICKS_PATH
+    )
 
     # print success message
     print("Pipeline completed successfully")
