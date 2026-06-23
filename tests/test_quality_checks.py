@@ -1,6 +1,7 @@
 from src.quality_checks import (
     check_sample_players_quality, 
-    check_recommendation_output_quality
+    check_recommendation_output_quality,
+    check_real_player_projections_quality
 )
 import pandas as pd
 import pytest
@@ -186,3 +187,69 @@ def test_drafted_player_in_recommendation_output_fails(tmp_path):
 
     # 4. Confirm it failed for the expected reason
     assert ("FAILED: Drafted players still appear in the recommendation output") in str(error.value)
+
+def test_real_player_projections_quality_passes(tmp_path):
+    """
+    Positive test:
+    Good real player projections file passes
+    """
+    fake_real_players_path = tmp_path / "fake_player_projections_2025.csv"
+
+    fake_real_players_df = pd.DataFrame({
+        "player_id": ["00-0033873", "00-0036223", "00-0033040"],
+        "player_name": ["Christian McCaffrey", "CeeDee Lamb", "Travis Kelce"],
+        "position": ["RB", "WR", "TE"],
+        "nfl_team": ["SF", "DAL", "KC"],
+        "projected_points": [250.5, 230.2, 180.0],
+        "replacement_points": [155, 145, 105],
+    })
+
+    fake_real_players_df.to_csv(fake_real_players_path, index=False)
+
+    check_real_player_projections_quality(fake_real_players_path)
+
+def test_real_player_projections_duplicate_player_id_fails(tmp_path):
+    """
+    Negative test:
+    Duplicate player_id fails
+    """
+    fake_real_players_path = tmp_path / "fake_player_projections_2025.csv"
+
+    fake_real_players_df = pd.DataFrame({
+        "player_id": ["00-0033873", "00-0033873"],
+        "player_name": ["Christian McCaffrey", "Christian McCaffrey"],
+        "position": ["RB", "RB"],
+        "nfl_team": ["SF", "SF"],
+        "projected_points": [250.5, 250.5],
+        "replacement_points": [155, 155],
+    })
+
+    fake_real_players_df.to_csv(fake_real_players_path, index=False)
+
+    with pytest.raises(ValueError) as error:
+        check_real_player_projections_quality(fake_real_players_path)
+
+    assert "FAILED: Player ID has duplicates" in str(error.value)
+
+def test_real_player_projections_bad_position_fails(tmp_path):
+    """
+    Negative test:
+    Bad position fails
+    """
+    fake_real_players_path = tmp_path / "fake_player_projections_2025.csv"
+
+    fake_real_players_df = pd.DataFrame({
+        "player_id": ["00-0033873"],
+        "player_name": ["Justin Tucker"],
+        "position": ["K"],
+        "nfl_team": ["BAL"],
+        "projected_points": [140.0],
+        "replacement_points": [0],
+    })
+
+    fake_real_players_df.to_csv(fake_real_players_path, index=False)
+
+    with pytest.raises(ValueError) as error:
+        check_real_player_projections_quality(fake_real_players_path)
+
+    assert "FAILED: Position is not only QB/RB/WR/TE" in str(error.value)

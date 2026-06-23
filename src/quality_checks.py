@@ -140,20 +140,20 @@ def check_recommendation_output_quality(
     # print passed
     print("PASSED: Recommendation output quality checks passed")
 
-def check_real_player_projections_quality():
+def check_real_player_projections_quality(real_players_path=REAL_PLAYERS_PATH):
     """
     Validate file player_projections_2025.csv
     """
     # check whether file exists
-    if not REAL_PLAYERS_PATH.exists():
+    if not real_players_path.exists():
         raise FileNotFoundError("FAILED: player_projections_2025.csv does not exist")
 
     # check if file is not empty
-    if REAL_PLAYERS_PATH.read_text().strip() == "":
+    if real_players_path.read_text().strip() == "":
         raise ValueError("FAILED: player_projections_2025.csv is empty")
 
     # read CSV into DataFrame
-    df = pd.read_csv(REAL_PLAYERS_PATH)
+    df = pd.read_csv(real_players_path)
 
     # check if required columns exist
     if df.empty:
@@ -216,3 +216,4 @@ def check_real_player_projections_quality():
 if __name__ == "__main__":
     check_sample_players_quality()
     check_recommendation_output_quality()
+    check_real_player_projections_quality()
